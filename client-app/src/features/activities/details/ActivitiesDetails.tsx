@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Card, Image } from 'semantic-ui-react';
+import { Button, Card, Container, Image } from 'semantic-ui-react';
 import { Activity } from '../../../app/models/activity';
 
 interface Props {
@@ -16,6 +16,7 @@ export default function ActivityDetails({ activity, cancelSelectActivity, openFo
                 <Card.Header>{activity.title}</Card.Header>
                 <Card.Meta>
                     <span>{activity.date}</span>
+                    <Container>{activity.city}, {activity.venue}</Container>                   
                 </Card.Meta>
                 <Card.Description>
                     {activity.description}
