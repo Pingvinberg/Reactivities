@@ -1,54 +1,32 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Grid, Sticky } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 import ActivityDetails from '../details/ActivitiesDetails';
 import ActivityForm from '../form/ActivityForm';
 import ActivityList from './ActivitiesList';
 
+export default observer( function ActivityDashboard() {
 
-interface Props {
-    activities: Activity[];
-    selectedActivity: Activity | undefined;
-    selectActivity: (id: string) => void;
-    cancelSelectActivity: () => void;
-    editMode: boolean;
-    openForm: (id: string) => void;
-    closeForm: () => void;
-    createOrEdit: (activity: Activity) => void;
-    deleteActivity: (id:string) => void;
-    submitting: boolean;
-}
+    const {activityStore} = useStore();
 
-export default function ActivityDashboard({activities, selectedActivity, selectActivity,
-     cancelSelectActivity, editMode, openForm, closeForm, createOrEdit, deleteActivity, submitting}: Props) {
+    const {selectedActivity, editMode} = activityStore;
+
     return (
         <Grid>
             <Grid.Column width='10'>                
-                <ActivityList activities={activities} 
-                    selectActivity={selectActivity}
-                    submitting={submitting} 
-                />
-            </Grid.Column>
+                <ActivityList />
+            </Grid.Column>            
             <Grid.Column width='6'>
+                { selectedActivity && !editMode &&
                 <Sticky offset={100}>
-                {selectedActivity && !editMode &&
-                <ActivityDetails 
-                    activity={selectedActivity} 
-                    cancelSelectActivity={cancelSelectActivity}
-                    openForm={openForm}
-                     
-                />} 
-                { editMode && 
-                    <ActivityForm 
-                        activity={selectedActivity}
-                        closeForm={closeForm}
-                        createOrEdit={createOrEdit}
-                        deleteActivity={deleteActivity}
-                        submitting={submitting}
-                    />
-                } 
-                </Sticky>
+                    <ActivityDetails/>
+                </Sticky>} 
+                { editMode &&
+                <Sticky offset={100}>
+                    <ActivityForm />
+                </Sticky>}
             </Grid.Column>
         </Grid>
     )
-}
+})

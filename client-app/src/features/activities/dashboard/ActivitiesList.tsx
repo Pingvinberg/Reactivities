@@ -1,19 +1,18 @@
+import { observer } from 'mobx-react-lite';
 import React from 'react';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
-import { Activity } from '../../../app/models/activity';
+import { useStore } from '../../../app/stores/store';
 
-interface Props {
-    activities: Activity[];
-    selectActivity: (id: string) => void;
-    submitting: boolean;    
-}
+export default observer(function ActivityList() {
 
-export default function ActivityList({ activities, selectActivity, submitting }: Props) {
+    const {activityStore} = useStore();
+    const {selectActivity, activitiesByDate} = activityStore
+
+    
     return (
-        <Segment>
-            {!submitting &&
+        <Segment>            
                 <Item.Group divided>
-                    {activities.map(activity => (
+                    {activitiesByDate.map(activity => (
                         <Item key={activity.id}>
                             <Item.Content>
                                 <Item.Header as='a'>{activity.title}</Item.Header>                            
@@ -29,8 +28,7 @@ export default function ActivityList({ activities, selectActivity, submitting }:
                             </Item.Content>
                         </Item>
                     ))}
-                </Item.Group>
-            }           
+                </Item.Group>                     
         </Segment>
     )
-}
+})
