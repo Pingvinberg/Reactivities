@@ -1,16 +1,20 @@
 import { observer } from 'mobx-react-lite';
-import React from 'react';
-import { Grid, Sticky } from 'semantic-ui-react';
+import React, { useEffect } from 'react';
+import { Grid } from 'semantic-ui-react';
+import LoadingComponent from '../../../app/layout/LoadingComponent';
 import { useStore } from '../../../app/stores/store';
-import ActivityDetails from '../details/ActivitiesDetails';
-import ActivityForm from '../form/ActivityForm';
 import ActivityList from './ActivitiesList';
 
 export default observer( function ActivityDashboard() {
 
     const {activityStore} = useStore();
+    const {loadActivities, activityRegistry} = activityStore; 
 
-    const {selectedActivity, editMode} = activityStore;
+    useEffect(() => { 
+        if(activityRegistry.size <= 1) loadActivities();
+    }, [loadActivities, activityRegistry]) 
+  
+    if(activityStore.loadingInitial) return (<LoadingComponent content='Loading...'/>) 
 
     return (
         <Grid>
@@ -18,14 +22,7 @@ export default observer( function ActivityDashboard() {
                 <ActivityList />
             </Grid.Column>            
             <Grid.Column width='6'>
-                { selectedActivity && !editMode &&
-                <Sticky offset={100}>
-                    <ActivityDetails/>
-                </Sticky>} 
-                { editMode &&
-                <Sticky offset={100}>
-                    <ActivityForm />
-                </Sticky>}
+                <h2>Filter goes here</h2>
             </Grid.Column>
         </Grid>
     )

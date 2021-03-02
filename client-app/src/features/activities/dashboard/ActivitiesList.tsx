@@ -1,12 +1,13 @@
 import { observer } from 'mobx-react-lite';
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button, Item, Label, Segment } from 'semantic-ui-react';
 import { useStore } from '../../../app/stores/store';
 
 export default observer(function ActivityList() {
 
     const {activityStore} = useStore();
-    const {selectActivity, activitiesByDate} = activityStore
+    const {activitiesByDate} = activityStore
 
     
     return (
@@ -22,7 +23,7 @@ export default observer(function ActivityList() {
                                     <div>{activity.city}, {activity.venue}</div>
                                 </Item.Description>
                                 <Item.Extra>
-                                    <Button onClick={() => selectActivity(activity.id)} floated='right' content='View' color='blue' />                                
+                                    <Button as={Link} to={`/activities/${activity.id}`} floated='right' content='View' color='blue' />                                
                                     <Label basic content={activity.category} />
                                 </Item.Extra>
                             </Item.Content>
