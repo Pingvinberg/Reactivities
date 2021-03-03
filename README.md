@@ -4,6 +4,7 @@ Reactivities. Webb application built from scratch using:
 
 Backend - 
 * **.Net Core 5.0**
+* **FluentValidation**
  
 Frontend -
 * **React 17**
