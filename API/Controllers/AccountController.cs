@@ -26,7 +26,7 @@ namespace API.Controllers
             _userManager = userManager;
         }
 
-        [AllowAnonymous]
+        
         [HttpPost("login")]
         public async Task<ActionResult<UserDto>> Login(LoginDto loginDto)
         {
@@ -41,28 +41,36 @@ namespace API.Controllers
             return Unauthorized();
         }
 
-        [AllowAnonymous]
-        [HttpPost("register")]
+        
+         [HttpPost("register")]
         public async Task<ActionResult<UserDto>> Register(RegisterDto registerDto)
         {
-            if(await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
+            if (await _userManager.Users.AnyAsync(x => x.Email == registerDto.Email))
             {
-                return BadRequest("Email taken");
+                ModelState.AddModelError("email", "Email is Taken");
+                return ValidationProblem();
             }
-            if(await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
+            if (await _userManager.Users.AnyAsync(x => x.UserName == registerDto.Username))
             {
-                return BadRequest("Username taken");
+                ModelState.AddModelError("username", "Username is taken");
+                return ValidationProblem();
             }
+
             var user = new AppUser
             {
                 DisplayName = registerDto.DisplayName,
                 Email = registerDto.Email,
                 UserName = registerDto.Username
             };
+
             var result = await _userManager.CreateAsync(user, registerDto.Password);
 
-            if(result.Succeeded) return CreateUserObject(user);
-            return BadRequest("Problem register user");
+            if (result.Succeeded)
+            {
+                return CreateUserObject(user);
+            }
+
+            return BadRequest("Problem registering user");
         }
 
         [Authorize]

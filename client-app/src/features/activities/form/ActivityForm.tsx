@@ -73,7 +73,7 @@ export default observer( function ActivityForm() {
                 enableReinitialize
                 initialValues={activity}
                 onSubmit={values => handleFormSubmit(values)}>
-                {({ handleSubmit, isValid, isSubmitting, dirty }) => (
+                {({ isValid, isSubmitting, dirty }) => (
                     <Form className='ui form'>
                         <MyTextInput name='title' placeholder='Title' />
                         <MyTextArea name='description' placeholder='Description' rows={3} />
