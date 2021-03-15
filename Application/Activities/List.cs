@@ -33,7 +33,7 @@ namespace Application.Activities
                     .ProjectTo<ActivityDto>(_mapper.ConfigurationProvider)
                     .ToListAsync(cancellationToken);
                     
-                return Result<List<ActivityDto>>.Succes(activities);
+                return Result<List<ActivityDto>>.Success(activities);
             }
         }
     }
