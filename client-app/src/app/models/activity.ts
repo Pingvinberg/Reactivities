@@ -27,7 +27,7 @@ export class ActivityFormValues {
     id?: string = undefined;
     title: string = '';
     date: Date | null = null;
-    category: string ='';
+    category: string = '';
     description: string = '';
     city: string = '';
     venue: string = '';

@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { observer } from 'mobx-react-lite';
 import React from 'react'
 import { Link } from 'react-router-dom'
 import { Button, Icon, Item, Label, Segment } from 'semantic-ui-react'
@@ -10,7 +11,7 @@ interface Props {
     activity: Activity;
 }
 
-export default function ActivityListItem({activity}: Props) {
+export default observer(function ActivityListItem({activity}: Props) {
 
     const {activityStore} = useStore();
     const {loading} = activityStore;
@@ -64,4 +65,4 @@ export default function ActivityListItem({activity}: Props) {
             </Segment>
         </Segment.Group>
     )
-}
+})

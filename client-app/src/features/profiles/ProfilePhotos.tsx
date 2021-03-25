@@ -1,6 +1,6 @@
 import { observer } from 'mobx-react-lite'
 import React, { SyntheticEvent, useState } from 'react'
-import { Card, Header, Tab, Image, Grid, GridColumn, Button } from 'semantic-ui-react'
+import { Card, Header, Tab, Image, Grid, GridColumn, Button, Checkbox } from 'semantic-ui-react'
 import ImageUploadWidget from '../../app/common/imageUpload/ImageUploadWidget';
 import { Photo, Profile } from '../../app/models/profile'
 import { useStore } from '../../app/stores/store';
@@ -13,7 +13,7 @@ export default observer(function ProfilePhotos({ profile }: Props) {
     const { profileStore: { isCurrentUser, uploadPhoto, uploading, loading, setMainPhoto, deletePhoto } } = useStore();
     const [addPhotoMode, setAddPhotoMode] = useState(false);
     const [editPhotoMode, setEditPhotoMode] = useState(false);
-    const [target, setTarget] = useState('');
+    const [target, setTarget] = useState('');    
 
     function handlePhotoUpload(file: Blob) {
         uploadPhoto(file).then(() => setAddPhotoMode(false));
@@ -37,20 +37,25 @@ export default observer(function ProfilePhotos({ profile }: Props) {
                 <GridColumn width={16}>
                     <Header floated='left' icon='image' content='Photos' />
                     {isCurrentUser && (
-                        <Button.Group floated='right'>
-                            <Button
-                                disabled={editPhotoMode}
-                                basic
-                                content={addPhotoMode && !editPhotoMode ? 'Cancel' : 'Add Photo'}
-                                onClick={() => setAddPhotoMode(!addPhotoMode)}
-                            />
-                            <Button
+                        <>
+                        <Button.Group floated='right'>                        
+                            {editPhotoMode && (
+                                <Button                                                                        
+                                    content={addPhotoMode ? 'Cancel' : 'Add Photo'}
+                                    icon={addPhotoMode ? 'reply' : 'add'}
+                                    onClick={() => setAddPhotoMode(!addPhotoMode)}
+                                />
+                            )}
+                        </Button.Group>
+                            <Checkbox                                                                                              
                                 disabled={addPhotoMode}
-                                basic
-                                content={editPhotoMode && !addPhotoMode ? 'Cancel' : 'Edit Photos'}
-                                onClick={() => setEditPhotoMode(!editPhotoMode)}
+                                toggle                            
+                                label={editPhotoMode ? 'Stop Manage Photos' : 'Manage Photos'}
+                                checked={editPhotoMode}
+                                onChange={() => setEditPhotoMode(!editPhotoMode)}
                             />
-                        </Button.Group>)
+                        </>
+                        )
                     }
 
                 </GridColumn>
@@ -62,7 +67,7 @@ export default observer(function ProfilePhotos({ profile }: Props) {
                             {profile.photos!.map(photo => (
                                 <Card key={photo.id}>
                                     <Image src={photo.url} />
-                                    {editPhotoMode && (
+                                    { editPhotoMode && (
                                         <Button.Group fluid widths={2}>
                                             <Button
                                                 basic
